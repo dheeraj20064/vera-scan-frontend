@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-// FIXED: Restored your live Hugging Face URL
+// FIXED: Restored your live Hugging Face URL to stop the "Local Network" popup
 const API_URL = "https://dheerajkrishnat-vera-scan-api.hf.space";
 
 const G = `
@@ -191,19 +191,6 @@ nav {
   border-color: rgba(0,229,160,0.35);
   background: rgba(0,229,160,0.04);
 }
-
-.dz-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 18px;
-  border-radius: 14px;
-  background: var(--s2);
-  border: 1px solid var(--border2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.dz-icon svg { width: 24px; height: 24px; stroke: var(--muted); }
 
 .dz-title {
   font-size: 16px;
@@ -671,8 +658,6 @@ export default function App() {
     try {
       const form = new FormData();
       form.append("file", file);
-      
-      // FIXED: Restored the path /analyze
       const res  = await fetch(`${API_URL}/analyze`, { method: "POST", body: form });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Analysis failed");
@@ -742,12 +727,7 @@ export default function App() {
           {!analyzing && !result && (
             <div className="upload-card">
               <div className={`drop-zone${drag ? " drag-active" : ""}${file ? " has-file" : ""}`}>
-                <div className="dz-icon">
-                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 16V8m0 0l-3 3m3-3l3 3" stroke="currentColor"/>
-                    <path d="M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" stroke="currentColor"/>
-                  </svg>
-                </div>
+                {/* ICON REMOVED PER REQUEST */}
                 <div className="dz-title">
                   {file ? "Video ready to analyze" : "Drag & drop your video here"}
                 </div>
