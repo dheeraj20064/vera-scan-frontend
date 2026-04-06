@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-const API_URL = "https://dheerajkrishnat-vera-scan-api.hf.space/analyze";
+const API_URL = "https://dheerajkrishnat-vera-scan-api.hf.space";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap');
