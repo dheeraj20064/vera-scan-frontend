@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 
-const API_URL = "http://localhost:8000";
+// FIXED: Restored your live Hugging Face URL
+const API_URL = "https://dheerajkrishnat-vera-scan-api.hf.space";
 
 const G = `
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap');
@@ -151,7 +152,6 @@ nav {
   animation: fadeUp 0.6s 0.2s ease both;
 }
 
-/* ── UPLOAD CARD ── */
 .upload-card {
   width: 100%;
   max-width: 540px;
@@ -172,11 +172,10 @@ nav {
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
-/* Drop zone — visual only, no click */
 .drop-zone {
   border: 1.5px dashed rgba(124,109,250,0.22);
   border-radius: 14px;
-  padding: 28px 24px 28px;
+  padding: 44px 24px 36px;
   text-align: center;
   background: rgba(124,109,250,0.03);
   margin-bottom: 20px;
@@ -219,7 +218,6 @@ nav {
   letter-spacing: 0.04em;
 }
 
-/* File strip shown after selection */
 .file-strip {
   display: flex;
   align-items: center;
@@ -270,7 +268,6 @@ nav {
 }
 .file-clear:hover { color: var(--red); }
 
-/* Divider */
 .divider {
   display: flex;
   align-items: center;
@@ -286,7 +283,6 @@ nav {
   text-transform: uppercase;
 }
 
-/* Upload Video File button — the ONLY way to pick a file */
 .upload-file-btn {
   width: 100%;
   padding: 17px;
@@ -314,7 +310,6 @@ nav {
 }
 .upload-file-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-/* Analyze button — shown after file is selected */
 .analyze-btn {
   width: 100%;
   padding: 17px;
@@ -352,7 +347,6 @@ nav {
 }
 .change-file-btn:hover { color: var(--text); border-color: var(--border2); }
 
-/* ── PROGRESS ── */
 .progress-wrap {
   width: 100%;
   max-width: 540px;
@@ -433,7 +427,6 @@ nav {
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 .step-row.active .step-indicator { animation: pulse 1s infinite; }
 
-/* ── RESULT ── */
 .result-wrap {
   width: 100%;
   max-width: 540px;
@@ -629,13 +622,13 @@ const STEPS = [
 ];
 
 export default function App() {
-  const [file, setFile]           = useState(null);
-  const [drag, setDrag]           = useState(false);
+  const [file, setFile]            = useState(null);
+  const [drag, setDrag]            = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
-  const [progress, setProgress]   = useState(0);
-  const [stepIdx, setStepIdx]     = useState(0);
-  const [result, setResult]       = useState(null);
-  const [error, setError]         = useState(null);
+  const [progress, setProgress]    = useState(0);
+  const [stepIdx, setStepIdx]      = useState(0);
+  const [result, setResult]        = useState(null);
+  const [error, setError]          = useState(null);
   const inputRef = useRef();
   const timerRef = useRef();
 
@@ -678,6 +671,8 @@ export default function App() {
     try {
       const form = new FormData();
       form.append("file", file);
+      
+      // FIXED: Restored the path /analyze
       const res  = await fetch(`${API_URL}/analyze`, { method: "POST", body: form });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Analysis failed");
@@ -714,7 +709,6 @@ export default function App() {
           if (!analyzing && !result) handleFile(e.dataTransfer.files[0]);
         }}
       >
-        {/* Nav */}
         <nav>
           <div className="nav-logo">VERA<span>SCAN</span></div>
           <div className="nav-badge">AI Detection v1.0</div>
@@ -737,7 +731,6 @@ export default function App() {
             every frame to determine if it was created by AI.
           </p>
 
-          {/* Hidden file input */}
           <input
             ref={inputRef}
             type="file"
@@ -746,12 +739,15 @@ export default function App() {
             onChange={(e) => handleFile(e.target.files[0])}
           />
 
-          {/* ── Upload card ── */}
           {!analyzing && !result && (
             <div className="upload-card">
-
-              {/* Drop zone — purely visual, drag events handled on wrap */}
               <div className={`drop-zone${drag ? " drag-active" : ""}${file ? " has-file" : ""}`}>
+                <div className="dz-icon">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 16V8m0 0l-3 3m3-3l3 3" stroke="currentColor"/>
+                    <path d="M3 17v2a2 2 0 002 2h14a2 2 0 002-2v-2" stroke="currentColor"/>
+                  </svg>
+                </div>
                 <div className="dz-title">
                   {file ? "Video ready to analyze" : "Drag & drop your video here"}
                 </div>
@@ -777,14 +773,12 @@ export default function App() {
                 )}
               </div>
 
-              {/* Divider */}
               <div className="divider">
                 <div className="divider-line" />
                 <div className="divider-text">or</div>
                 <div className="divider-line" />
               </div>
 
-              {/* Upload Video File button — triggers file picker */}
               {!file && (
                 <button
                   className="upload-file-btn"
@@ -799,7 +793,6 @@ export default function App() {
                 </button>
               )}
 
-              {/* Analyze + change buttons shown after file is picked */}
               {file && (
                 <>
                   <button className="analyze-btn" onClick={analyze}>
@@ -818,7 +811,6 @@ export default function App() {
             </div>
           )}
 
-          {/* ── Progress ── */}
           {analyzing && (
             <div className="progress-wrap">
               <div className="progress-card">
@@ -847,7 +839,6 @@ export default function App() {
             </div>
           )}
 
-          {/* ── Result ── */}
           {result && (
             <div className="result-wrap">
               <div className={`verdict-hero ${isReal ? "real" : "ai"}`}>
